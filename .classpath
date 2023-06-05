@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/java"/>
+	<classpathentry kind="src" path="resources/common"/>
+	<classpathentry kind="src" path="build"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.validation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.validation.gwt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.trizia"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.trizia.gwt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gwt.jre"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.util.gwt"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.log"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.log.gwt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gplatform"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gplatform.gwt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gwt"/>
+	<classpathentry kind="lib" path="/daten/develop/gwt-2.10.0/gwt-user.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/daten/develop/gwt-2.10.0/doc/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/daten/develop/gwt-2.10.0/gwt-codeserver.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/daten/develop/gwt-2.10.0/doc/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/daten/develop/gwt-2.10.0/gwt-dev.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/daten/develop/gwt-2.10.0/doc/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/daten/develop/gwt-2.10.0/validation-api-1.0.0.GA.jar" sourcepath="/daten/develop/gwt-2.10.0/validation-api-1.0.0.GA-sources.jar"/>
+	<classpathentry kind="lib" path="/daten/develop/gwt-2.10.0/validation-api-1.0.0.GA-sources.jar"/>
+	<classpathentry kind="lib" path="build/nobuto.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gwtswing"/>
+	<classpathentry kind="output" path="out"/>
+</classpath>
