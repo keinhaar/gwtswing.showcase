@@ -34,6 +34,7 @@ import de.exware.gwtswing.swing.GPasswordField;
 import de.exware.gwtswing.swing.GProgressBar;
 import de.exware.gwtswing.swing.GRadioButton;
 import de.exware.gwtswing.swing.GScrollPane;
+import de.exware.gwtswing.swing.GSlider;
 import de.exware.gwtswing.swing.GSplitPane;
 import de.exware.gwtswing.swing.GTabbedPane;
 import de.exware.gwtswing.swing.GTable;
@@ -46,6 +47,8 @@ import de.exware.gwtswing.swing.border.GBevelBorder;
 import de.exware.gwtswing.swing.border.GBorderFactory;
 import de.exware.gwtswing.swing.border.GEtchedBorder;
 import de.exware.gwtswing.swing.border.SelectiveLineBorder;
+import de.exware.gwtswing.swing.event.GChangeEvent;
+import de.exware.gwtswing.swing.event.GChangeListener;
 import de.exware.gwtswing.swing.event.GTreeSelectionEvent;
 import de.exware.gwtswing.swing.event.GTreeSelectionListener;
 import de.exware.gwtswing.swing.table.GTableManager;
@@ -62,9 +65,13 @@ public class SwingSet extends GFrame
     private void createViewsDebug()
     {
         GFrame frame = new GFrame();
-        frame.setLayout(new GBorderLayout(20,20));
+        frame.setUndecorated(true);
+        frame.setLayout(new GGridBagLayout());
         
-        frame.add(new GLabel("hello"), GBorderLayout.EAST);
+        GGridBagConstraints gbc = new GGridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        frame.add(new GSlider(GSlider.VERTICAL), gbc);
         GUtilities.addToBody(frame);
         frame.setBounds(0, 0, GPlatform.getWin().getClientWidth() -1, GPlatform.getWin().getClientHeight()-1);
         frame.revalidate();
@@ -220,6 +227,40 @@ public class SwingSet extends GFrame
         });
         panel.add(bt, gbc);
         
+        gbc.gridy ++;
+        gbc.gridx = 1;
+        
+        label = new GLabel("Slider");
+        panel.add(label, gbc);
+
+        gbc.gridx ++;
+        gbc.gridwidth = 2;
+        gbc.fill = GGridBagConstraints.HORIZONTAL;
+        GSlider slider = new GSlider();
+        slider.setValue(90);
+        slider.addChangeListener(new GChangeListener()
+        {
+            
+            @Override
+            public void stateChanged(GChangeEvent evt)
+            {
+                GPlatform.getInstance().alert("value: " + slider.getValue());
+            }
+        });
+        panel.add(slider, gbc);
+        gbc.gridy ++;
+        gbc.gridx = 1;
+        GSlider vslider = new GSlider(GSlider.VERTICAL,0,10,2);
+        vslider.addChangeListener(new GChangeListener()
+        {
+            
+            @Override
+            public void stateChanged(GChangeEvent evt)
+            {
+                GPlatform.getInstance().alert("value: " + vslider.getValue());
+            }
+        });
+        panel.add(vslider, gbc);
         return panel;
     }
 
