@@ -46,6 +46,8 @@ import de.exware.gwtswing.swing.GUtilities;
 import de.exware.gwtswing.swing.border.GBevelBorder;
 import de.exware.gwtswing.swing.border.GBorderFactory;
 import de.exware.gwtswing.swing.border.GEtchedBorder;
+import de.exware.gwtswing.swing.border.GLineBorder;
+import de.exware.gwtswing.swing.border.GTitledBorder;
 import de.exware.gwtswing.swing.border.SelectiveLineBorder;
 import de.exware.gwtswing.swing.event.GChangeEvent;
 import de.exware.gwtswing.swing.event.GChangeListener;
@@ -142,7 +144,6 @@ public class SwingSet extends GFrame
 
         GUtilities.addToBody(panel);
         panel.setBounds(0, 0, GPlatform.getWin().getClientWidth() -1, GPlatform.getWin().getClientHeight()-1);
-        panel.setSize(2000, 1000);
         panel.revalidate();
     }
     
@@ -431,6 +432,23 @@ public class SwingSet extends GFrame
         gbc.gridx++;
         label = new GLabel("5px GBorder on Right");
         label.setBorder(new SelectiveLineBorder(GColor.GREEN, 0, 0, 0, 5));
+        panel.add(label, gbc);
+        gbc.gridx = 1;
+        gbc.gridy++;
+        label = new GLabel("GTitledBorder");
+        label.setBorder(new GTitledBorder("Title"));
+        panel.add(label, gbc);
+        gbc.gridx++;
+        label = new GLabel("GTitledBorder Bevel Raised");
+        label.setBorder(new GTitledBorder(new GBevelBorder(GBevelBorder.RAISED), "Title"));
+        panel.add(label, gbc);
+        gbc.gridx++;
+        label = new GLabel("GTitledBorder Etched Raised");
+        label.setBorder(new GTitledBorder(new GEtchedBorder(GEtchedBorder.RAISED), "Title"));
+        panel.add(label, gbc);
+        gbc.gridx++;
+        label = new GLabel("GTitledBorder LineBorder");
+        label.setBorder(new GTitledBorder(new GLineBorder(GColor.RED, 4), "Title"));
         panel.add(label, gbc);
         return panel;
     }
