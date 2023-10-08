@@ -31,11 +31,13 @@ import de.exware.gwtswing.swing.GMenuBar;
 import de.exware.gwtswing.swing.GOptionPane;
 import de.exware.gwtswing.swing.GPanel;
 import de.exware.gwtswing.swing.GPasswordField;
+import de.exware.gwtswing.swing.GPopupMenu;
 import de.exware.gwtswing.swing.GProgressBar;
 import de.exware.gwtswing.swing.GRadioButton;
 import de.exware.gwtswing.swing.GScrollPane;
 import de.exware.gwtswing.swing.GSlider;
 import de.exware.gwtswing.swing.GSplitPane;
+import de.exware.gwtswing.swing.GSwingUtilities;
 import de.exware.gwtswing.swing.GTabbedPane;
 import de.exware.gwtswing.swing.GTable;
 import de.exware.gwtswing.swing.GTextArea;
@@ -262,6 +264,34 @@ public class SwingSet extends GFrame
             }
         });
         panel.add(vslider, gbc);
+        
+        gbc.gridy ++;
+        gbc.gridx = 1;
+        GButton popupMenu = new GButton("GPopupMenu");
+        panel.add(popupMenu, gbc);
+        popupMenu.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                GPopupMenu menu = new GPopupMenu();
+                menu.add(new GAbstractAction("<html>Popup<br>Menu")
+                {
+                });
+                menu.show(popupMenu, 5,5);
+                GSwingUtilities.invokeLater(new Runnable()
+                {
+                    
+                    @Override
+                    public void run()
+                    {
+                        System.out.println("Showing: " + menu.isShowing());
+                        System.out.println("Visible: " + menu.isVisible());
+                    }
+                });
+            }
+        });
+        
         return panel;
     }
 
@@ -318,7 +348,6 @@ public class SwingSet extends GFrame
         GList list = new GList(
             new String[] { "White", "Red", "Blue", "Green", "Orange", "Yellow", "Pink", "Brown", "Black" });
         GScrollPane spane = new GScrollPane(list);
-        spane.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
         panel.add(spane);
         label = new GLabel("GList with Renderer");
         panel.add(label);
@@ -335,15 +364,16 @@ public class SwingSet extends GFrame
             }
         });
         spane = new GScrollPane(list);
-        spane.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
         panel.add(spane);
         return panel;
     }
 
     private GComponent createTabbedPane()
     {
-        PartitionedPanel panel = new PartitionedPanel(1);
+        PartitionedPanel panel = new PartitionedPanel(2);
         panel.addSeparator("Vertical GTabbedPane");
+        GLabel label = new GLabel("Tabs right");
+        panel.add(label);
         GTabbedPane vertical = new GTabbedPane(GTabbedPane.RIGHT);
         vertical.addTab("First",
             new GLabel(
@@ -353,9 +383,35 @@ public class SwingSet extends GFrame
         vertical.addTab("Second", l, false);
         vertical.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
         panel.add(vertical);
+        
+        label = new GLabel("Tabs left");
+        panel.add(label);
+        vertical = new GTabbedPane(GTabbedPane.LEFT);
+        vertical.addTab("First",
+            new GLabel(
+                "The first tabbed component. <br>Click on the other Tabs to show them<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines"),
+            false);
+        l = new GLabel("The second tabbed component. <br>Click on the other Tabs to show them");
+        vertical.addTab("Second", l, false);
+        vertical.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
+        panel.add(vertical);
 
         panel.addSeparator("Horizontal GTabbedPane");
+        label = new GLabel("Tabs Top");
+        panel.add(label);
         GTabbedPane horizontal = new GTabbedPane(GTabbedPane.TOP);
+        horizontal.addTab("First",
+            new GLabel(
+                "The first tabbed component. <br>Click on the other Tabs to show them<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines"),
+            false);
+        l = new GLabel("The second tabbed component. <br>Click on the other Tabs to show them");
+        horizontal.addTab("Second", l, false);
+        panel.add(horizontal);
+        horizontal.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
+
+        label = new GLabel("Tabs Bottom");
+        panel.add(label);
+        horizontal = new GTabbedPane(GTabbedPane.BOTTOM);
         horizontal.addTab("First",
             new GLabel(
                 "The first tabbed component. <br>Click on the other Tabs to show them<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines"),
