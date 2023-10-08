@@ -342,8 +342,10 @@ public class SwingSet extends GFrame
 
     private GComponent createTabbedPane()
     {
-        PartitionedPanel panel = new PartitionedPanel(1);
+        PartitionedPanel panel = new PartitionedPanel(2);
         panel.addSeparator("Vertical GTabbedPane");
+        GLabel label = new GLabel("Tabs right");
+        panel.add(label);
         GTabbedPane vertical = new GTabbedPane(GTabbedPane.RIGHT);
         vertical.addTab("First",
             new GLabel(
@@ -353,9 +355,35 @@ public class SwingSet extends GFrame
         vertical.addTab("Second", l, false);
         vertical.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
         panel.add(vertical);
+        
+        label = new GLabel("Tabs left");
+        panel.add(label);
+        vertical = new GTabbedPane(GTabbedPane.LEFT);
+        vertical.addTab("First",
+            new GLabel(
+                "The first tabbed component. <br>Click on the other Tabs to show them<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines"),
+            false);
+        l = new GLabel("The second tabbed component. <br>Click on the other Tabs to show them");
+        vertical.addTab("Second", l, false);
+        vertical.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
+        panel.add(vertical);
 
         panel.addSeparator("Horizontal GTabbedPane");
+        label = new GLabel("Tabs Top");
+        panel.add(label);
         GTabbedPane horizontal = new GTabbedPane(GTabbedPane.TOP);
+        horizontal.addTab("First",
+            new GLabel(
+                "The first tabbed component. <br>Click on the other Tabs to show them<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines"),
+            false);
+        l = new GLabel("The second tabbed component. <br>Click on the other Tabs to show them");
+        horizontal.addTab("Second", l, false);
+        panel.add(horizontal);
+        horizontal.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
+
+        label = new GLabel("Tabs Bottom");
+        panel.add(label);
+        horizontal = new GTabbedPane(GTabbedPane.BOTTOM);
         horizontal.addTab("First",
             new GLabel(
                 "The first tabbed component. <br>Click on the other Tabs to show them<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines<br>Some more Lines"),
