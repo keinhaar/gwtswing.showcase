@@ -59,7 +59,7 @@ public class Build extends JavaBuilder
     {      
         addSources("source/java");
         addDependency(new MavenDependency("de.exware", "de.exware.gplatform", "1.0"));
-        addDependency(new MavenDependency("de.exware", "de.exware.gwtswing", "1.0"));
+        addDependency(new MavenDependency("de.exware", "de.exware.gwtswing", "1.1"));
         super.compile();
     }
 }
