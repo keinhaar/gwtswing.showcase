@@ -1,9 +1,16 @@
 package de.exware.gwtswing.sample;
 
 import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.style.GPStyleSheet;
+import de.exware.gplatform.timer.AbstractGPTimerTask;
+import de.exware.gplatform.timer.GPTimer;
 import de.exware.gwtswing.Constants;
 import de.exware.gwtswing.PartitionedPanel;
 import de.exware.gwtswing.StringRenderer;
+import de.exware.gwtswing.animation.Animation;
+import de.exware.gwtswing.animation.ExpandHorizontalAnimation;
+import de.exware.gwtswing.animation.FadeInAnimation;
+import de.exware.gwtswing.animation.FadeOutAnimation;
 import de.exware.gwtswing.awt.GBorderLayout;
 import de.exware.gwtswing.awt.GCardLayout;
 import de.exware.gwtswing.awt.GColor;
@@ -37,6 +44,7 @@ import de.exware.gwtswing.swing.GRadioButton;
 import de.exware.gwtswing.swing.GScrollPane;
 import de.exware.gwtswing.swing.GSlider;
 import de.exware.gwtswing.swing.GSplitPane;
+import de.exware.gwtswing.swing.GSwingConstants;
 import de.exware.gwtswing.swing.GSwingUtilities;
 import de.exware.gwtswing.swing.GTabbedPane;
 import de.exware.gwtswing.swing.GTable;
@@ -44,6 +52,7 @@ import de.exware.gwtswing.swing.GTextArea;
 import de.exware.gwtswing.swing.GTextField;
 import de.exware.gwtswing.swing.GToggleButton;
 import de.exware.gwtswing.swing.GTree;
+import de.exware.gwtswing.swing.GUIManager;
 import de.exware.gwtswing.swing.GUtilities;
 import de.exware.gwtswing.swing.border.GBevelBorder;
 import de.exware.gwtswing.swing.border.GBorderFactory;
@@ -53,11 +62,9 @@ import de.exware.gwtswing.swing.border.GTitledBorder;
 import de.exware.gwtswing.swing.border.SelectiveLineBorder;
 import de.exware.gwtswing.swing.event.GChangeEvent;
 import de.exware.gwtswing.swing.event.GChangeListener;
-import de.exware.gwtswing.swing.event.GTreeSelectionEvent;
-import de.exware.gwtswing.swing.event.GTreeSelectionListener;
+import de.exware.gwtswing.swing.event.GListSelectionEvent;
+import de.exware.gwtswing.swing.event.GListSelectionListener;
 import de.exware.gwtswing.swing.table.GTableManager;
-import de.exware.gwtswing.swing.tree.GDefaultMutableTreeNode;
-import de.exware.gwtswing.swing.tree.GDefaultTreeModel;
  
 public class SwingSet extends GFrame
 {
@@ -83,6 +90,10 @@ public class SwingSet extends GFrame
     
     private void createViews()
     {
+        String style = GPlatform.getInstance().getLocalStorage().getItem("style");        
+        GPStyleSheet.getStyleSheet("dark.css").setEnabled("dark".equals(style));
+        GPStyleSheet.getStyleSheet("bright.css").setEnabled("bright".equals(style));
+        GUIManager.resetCache();
         final GPanel panel = new GPanel();
         
         panel.setLayout(new GBorderLayout());
@@ -104,20 +115,27 @@ public class SwingSet extends GFrame
         content.add(createBorders(), "Borders");
         content.add(createInput(), "Input");
         content.add(createSplitPane(), "Split");
+        content.add(createAnimation(), "Animation");
+        content.add(createLook(), "Look");
 
-        GTree navigation = createNavigation();        
+        GList navigation = createNavigation();      
+        navigation.setSelectedIndex(0);
         GScrollPane spane = new GScrollPane(navigation);
         split.setLeftComponent(spane);
-        navigation.addTreeSelectionListener(new GTreeSelectionListener()
+        navigation.addListSelectionListener(new GListSelectionListener()
         {
             @Override
-            public void valueChanged(GTreeSelectionEvent e)
+            public void valueChanged(GListSelectionEvent e)
             {
-                GDefaultMutableTreeNode node = (GDefaultMutableTreeNode) e.getPath().getLastPathComponent();
-                Object value = node.getUserObject();
-                GCardLayout cl = (GCardLayout) content.getLayout();
-                cl.show(content, (String) value);
-                content.revalidate();
+//                GDefaultMutableTreeNode node = (GDefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                GList list = (GList) e.getSource();
+                if(list.getSelectedValuesList().size() > 0)
+                {
+                    Object value = list.getSelectedValuesList().get(0);
+                    GCardLayout cl = (GCardLayout) content.getLayout();
+                    cl.show(content, (String) value);
+                    content.revalidate();
+                }
             }
         });
         split.setDividerLocation(navigation.getPreferredSize().width);
@@ -142,7 +160,7 @@ public class SwingSet extends GFrame
         helpmenu.add(new AboutAction());
         
         headpanel.add(helptitle);
-        headpanel.add(menubar);
+        headpanel.add(menubar, GGridBagConstraints.HORIZONTAL, 1, 1, 1, 0);
 
         GUtilities.addToBody(panel);
         panel.setBounds(0, 0, GPlatform.getWin().getClientWidth() -1, GPlatform.getWin().getClientHeight()-1);
@@ -434,30 +452,28 @@ public class SwingSet extends GFrame
         gbc.insets.bottom = 10;
         GLabel label = new GLabel("No GBorder");
         panel.add(label, gbc);
+
         gbc.gridx++;
         label = new GLabel("1px GLineBorder");
         label.setBorder(GBorderFactory.createLineBorder(GColor.BLUE, 1));
         panel.add(label, gbc);
+
         gbc.gridx++;
-        label = new GLabel("5px GLineBorder")
-        {
-            @Override
-            public GDimension getPreferredSize()
-            {
-                return super.getPreferredSize();
-            }
-        };
+        label = new GLabel("5px GLineBorder");
         label.setBorder(GBorderFactory.createLineBorder(GColor.RED, 5));
         panel.add(label, gbc);
+
         gbc.gridx = 1;
         gbc.gridy++;
         label = new GLabel("5px GEmptyBorder");
         label.setBorder(GBorderFactory.createEmptyBorder(5, 5, 5, 5));
         panel.add(label, gbc);
+
         gbc.gridx++;
         label = new GLabel("10px GEmptyBorder");
         label.setBorder(GBorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(label, gbc);
+        
         gbc.gridx = 1;
         gbc.gridy++;
         label = new GLabel("GEtchedBorder lowered");
@@ -489,6 +505,7 @@ public class SwingSet extends GFrame
         label = new GLabel("5px GBorder on Right");
         label.setBorder(new SelectiveLineBorder(GColor.GREEN, 0, 0, 0, 5));
         panel.add(label, gbc);
+        
         gbc.gridx = 1;
         gbc.gridy++;
         label = new GLabel("GTitledBorder");
@@ -517,6 +534,139 @@ public class SwingSet extends GFrame
         GScrollPane spane = new GScrollPane(tree);
         spane.setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
         return spane;
+    }
+
+    private GComponent createAnimation()
+    {
+        PartitionedPanel panel = new PartitionedPanel(1);
+        panel.addSeparator("All of these is currently experimental");
+        GLabel animatedLabel = new GLabel("AnimatedLabel");
+        animatedLabel.setHorizontalTextPosition(GSwingConstants.CENTER);
+        animatedLabel.setForeground(GColor.YELLOW);
+        panel.add(animatedLabel);
+        animatedLabel.setPreferredSize(new GDimension(200, 100));
+        animatedLabel.setBackground(GColor.BLUE);
+
+        GPTimer timer = GPTimer.createInstance();
+        GButton bt = new GButton("Fade In (5s)");
+        bt.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                Animation fadeIn = new FadeInAnimation(5f);
+                fadeIn.install(animatedLabel);
+                bt.setEnabled(false);
+                timer.schedule(new AbstractGPTimerTask()
+                {
+                    @Override
+                    public void execute()
+                    {
+                        fadeIn.uninstall(animatedLabel);
+                        bt.setEnabled(true);
+                    }
+                }, 5000);
+            }
+        });
+        panel.add(bt, GGridBagConstraints.HORIZONTAL, 1, 1);
+        GButton bt2 = new GButton("Fade Out (5s)");
+        bt2.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                Animation fadeOut = new FadeOutAnimation(5f);
+                fadeOut.install(animatedLabel);
+                animatedLabel.setVisible(false);
+                bt2.setEnabled(false);
+                timer.schedule(new AbstractGPTimerTask()
+                {
+                    @Override
+                    public void execute()
+                    {
+                        fadeOut.uninstall(animatedLabel);
+                        bt2.setEnabled(true);
+                        animatedLabel.setVisible(true);
+                    }
+                }, 5000);
+            }
+        });
+        panel.add(bt2, GGridBagConstraints.HORIZONTAL, 1, 1);
+        GButton bt3 = new GButton("Expand Horizontal (5s)");
+        bt3.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                Animation fadeOut = new ExpandHorizontalAnimation(5f);
+                fadeOut.install(animatedLabel);
+                bt3.setEnabled(false);
+                timer.schedule(new AbstractGPTimerTask()
+                {
+                    @Override
+                    public void execute()
+                    {
+                        fadeOut.uninstall(animatedLabel);
+                        bt3.setEnabled(true);
+                    }
+                }, 5000);
+            }
+        });
+        panel.add(bt3, GGridBagConstraints.HORIZONTAL, 1, 1);
+        
+        return panel;
+    }
+
+    private GComponent createLook()
+    {
+        PartitionedPanel panel = new PartitionedPanel(1);
+        panel.addSeparator("Use of different Looks at Runtime");
+        GButton bt1 = new GButton("Default");
+        bt1.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                GPStyleSheet.getStyleSheet("dark.css").setEnabled(false);
+                GPStyleSheet.getStyleSheet("bright.css").setEnabled(false);
+                GUIManager.resetCache();
+                GSwingUtilities.getRoot(panel).revalidate();
+                GPlatform.getInstance().getLocalStorage().setItem("style", "default");
+            }
+        });
+        panel.add(bt1, GGridBagConstraints.HORIZONTAL, 1, 1);
+        
+        GButton bt2 = new GButton("Dark");
+        bt2.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                GPStyleSheet.getStyleSheet("dark.css").setEnabled(true);
+                GPStyleSheet.getStyleSheet("bright.css").setEnabled(false);
+                GUIManager.resetCache();
+                GSwingUtilities.getRoot(panel).revalidate();
+                GPlatform.getInstance().getLocalStorage().setItem("style", "dark");
+            }
+        });
+        panel.add(bt2, GGridBagConstraints.HORIZONTAL, 1, 1);
+        
+        GButton bt3 = new GButton("Bright");
+        bt3.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                GPStyleSheet.getStyleSheet("dark.css").setEnabled(false);
+                GPStyleSheet.getStyleSheet("bright.css").setEnabled(true);
+                GUIManager.resetCache();
+                GSwingUtilities.getRoot(panel).revalidate();
+                GPlatform.getInstance().getLocalStorage().setItem("style", "bright");
+            }
+        });
+        panel.add(bt3, GGridBagConstraints.HORIZONTAL, 1, 1);
+        
+        return panel;
     }
 
     private GComponent createTable()
@@ -576,6 +726,17 @@ public class SwingSet extends GFrame
         gbc.gridx++;
         GButton ibt = new GButton("GButton with Image");
         ibt.setIcon(new GImageIcon(GUtilities.getResource(Constants.PLUGIN_ID, "/icons/file.svg"), 30, 30));
+        ibt.addActionListener(new GActionListener()
+        {
+            @Override
+            public void actionPerformed(GActionEvent evt)
+            {
+                GPStyleSheet style = GPStyleSheet.getStyleSheet("alternative.css");
+                style.setEnabled(false);
+                style = GPStyleSheet.getStyleSheet("alternative2.css");
+                style.setEnabled(true);
+            }
+        });
         panel.add(ibt, gbc);
         gbc.gridx = 1;
         gbc.gridy++;
@@ -747,32 +908,48 @@ public class SwingSet extends GFrame
         return panel;
     }
 
-    private GTree createNavigation()
+    private GList createNavigation()
     {
-        GTree nav = new GTree();
+        GList nav = new GList();
         nav.setPreferredSize(new GDimension(200, 400));
-        nav.setRootVisible(false);
-        GDefaultMutableTreeNode root = new GDefaultMutableTreeNode("UI Components");
-        GDefaultMutableTreeNode layouts = new GDefaultMutableTreeNode("Layout Manager");
-        root.add(layouts);
-        GDefaultMutableTreeNode buttons = new GDefaultMutableTreeNode("Buttons");
-        root.add(buttons);
-        GDefaultMutableTreeNode borders = new GDefaultMutableTreeNode("Borders");
-        root.add(borders);
-        GDefaultMutableTreeNode tree = new GDefaultMutableTreeNode("Tree");
-        root.add(tree);
-        GDefaultMutableTreeNode table = new GDefaultMutableTreeNode("Table");
-        root.add(table);
-        GDefaultMutableTreeNode tabbedPane = new GDefaultMutableTreeNode("TabbedPane");
-        root.add(tabbedPane);
-        GDefaultMutableTreeNode input = new GDefaultMutableTreeNode("Input");
-        root.add(input);
-        GDefaultMutableTreeNode other = new GDefaultMutableTreeNode("Other");
-        root.add(other);
-        GDefaultMutableTreeNode split = new GDefaultMutableTreeNode("Split");
-        root.add(split);
-        GDefaultTreeModel model = new GDefaultTreeModel(root);
-        nav.setModel(model);
+//        nav.setRootVisible(false);
+        Object[] data = new String[]
+        {
+            "Layout Manager"
+            , "Buttons"
+            , "Borders"
+            , "Tree"
+            , "Table"
+            , "TabbedPane"
+            , "Input"
+            , "Split"
+            , "Look"
+            , "Animation"
+            , "Other"
+        };
+        
+        nav.setListData(data);
+//        GDefaultMutableTreeNode root = new GDefaultMutableTreeNode("UI Components");
+//        GDefaultMutableTreeNode layouts = new GDefaultMutableTreeNode("Layout Manager");
+//        root.add(layouts);
+//        GDefaultMutableTreeNode buttons = new GDefaultMutableTreeNode("Buttons");
+//        root.add(buttons);
+//        GDefaultMutableTreeNode borders = new GDefaultMutableTreeNode("Borders");
+//        root.add(borders);
+//        GDefaultMutableTreeNode tree = new GDefaultMutableTreeNode("Tree");
+//        root.add(tree);
+//        GDefaultMutableTreeNode table = new GDefaultMutableTreeNode("Table");
+//        root.add(table);
+//        GDefaultMutableTreeNode tabbedPane = new GDefaultMutableTreeNode("TabbedPane");
+//        root.add(tabbedPane);
+//        GDefaultMutableTreeNode input = new GDefaultMutableTreeNode("Input");
+//        root.add(input);
+//        GDefaultMutableTreeNode other = new GDefaultMutableTreeNode("Other");
+//        root.add(other);
+//        GDefaultMutableTreeNode split = new GDefaultMutableTreeNode("Split");
+//        root.add(split);
+//        GDefaultTreeModel model = new GDefaultTreeModel(root);
+//        nav.setModel(model);
         return nav;
     }
 }

@@ -1,0 +1,51 @@
+:root {
+	--background: #111111;
+	--textcolor: #dddddd;
+	--listBackground: #222222;
+	--selectedBackground: #333344;
+}
+
+.gwts-GMenuItem {
+	background-color: #222222;
+}
+
+.gwts-GMenu {
+	background-color: #222222;
+}
+
+.gwts-GMenuBar {
+	background-color: #222222;
+}
+
+.gwts-GButton {
+	background-color: #292933;
+}
+
+.gwts-GToggleButton {
+	background-color: #292933;
+}
+
+.gwts-GTabbedPane-Tabs {
+	background: #000000;
+}
+
+.gwts-GTabbedPane-Tab {
+	background: #000000;
+}
+
+.gwts-GTabbedPane-selectedTab {
+	background-color: var(--background);	
+}
+
+.gwts-Divider {
+	background-color: #444444; 
+}
+
+.gwts-PartitionedPanel-Separator-text {
+	color: #d0d0ff;
+}
+
+.gwts-PartitionedPanel-Separator-line {
+	background-color: #d0d0ff;
+}
+

@@ -58,8 +58,8 @@ public class Build extends JavaBuilder
     public void compile() throws Exception
     {      
         addSources("source/java");
-        addDependency(new MavenDependency("de.exware", "de.exware.gplatform", "1.0"));
-        addDependency(new MavenDependency("de.exware", "de.exware.gwtswing", "1.1"));
+        addDependency(new MavenDependency("de.exware", "de.exware.gplatform", "1.1"));
+        addDependency(new MavenDependency("de.exware", "de.exware.gwtswing", "1.2"));
         super.compile();
     }
 }
